@@ -2,20 +2,18 @@ use super::error::CSVError;
 
 
 pub struct CSV {
-    name: String,
     headers: Vec<String>,
     lines: Vec<String>,
     delimiter: char,
 }
 
 impl CSV {
-    pub fn new(name: &str) -> Self {
+    pub fn new() -> Self {
         Self {
-            name: name.to_string(),
             headers: vec![],
             lines: vec![],
             delimiter: ',',
-        }\
+        }
     }
     
     pub fn set_headers(&mut self, headers: Vec<String>) {

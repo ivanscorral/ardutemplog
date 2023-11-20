@@ -1,26 +1,32 @@
-use std::{io::BufWriter, fs::File};
-
+use std::fs::File;
+use std::path::PathBuf;
 use super::csv::CSV;
+use super::error::CSVError;
 
 struct CSVWriter {
-    name: String,
+    path: PathBuf,
     data: CSV,
-    exists: bool,
-    buffer: Option<BufWriter<File>>
+    file: File,
 }
 
 impl CSVWriter {
-    pub fn new(name: Option<&str>) -> CSVWriter {
-        CSVWriter {
-            name: name.to_string(),
-            exists: false,
+    pub fn new(path: Option<&str>, data: CSV) -> Result<Self, CSVError> {
+        let path = Self::resolve_file_path(path);
+        let file = File::create(&path)?;
+
+        Ok(CSVWriter { path, data, file })
+    }
+
+    fn resolve_file_path(path_str: Option<&str>) -> PathBuf {
+        if let Some(path_str) = path_str {
+            PathBuf::from(path_str)
+        } else {
+            let epoch_millis = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .expect("Time went backwards")
+                .as_millis();
+            PathBuf::from(format!("{}.csv", epoch_millis))
         }
     }
-    
-    fn get_epoch_time(&self) -> u128 {
-        std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .unwrap()
-            .as_millis()
-    }
+
 }

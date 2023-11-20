@@ -4,6 +4,7 @@ pub enum CSVError {
     NoHeaders,
     IOError(io::Error),
     InvalidDelimiter(char),
+    Other(String),
 }
 
 impl From<io::Error> for CSVError {
@@ -18,6 +19,7 @@ impl fmt::Display for CSVError {
             CSVError::NoHeaders => write!(f, "No headers found in CSV data/file"),
             CSVError::IOError(err) =>  write!(f, "IO error: {}", err),
             CSVError::InvalidDelimiter(delimiter) => write!(f, "Invalid delimiter: {}", delimiter),
+            CSVError::Other(err) => write!(f, "CSVError: {}", err),
         }
         
     }
