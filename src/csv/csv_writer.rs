@@ -1,4 +1,5 @@
-use std::fs::File;
+use std::io::Write;
+use std::fs::{File, OpenOptions};
 use std::path::PathBuf;
 use super::csv::CSV;
 use super::error::CSVError;
@@ -12,9 +13,18 @@ struct CSVWriter {
 impl CSVWriter {
     pub fn new(path: Option<&str>, data: CSV) -> Result<Self, CSVError> {
         let path = Self::resolve_file_path(path);
-        let file = File::create(&path)?;
+        let file = OpenOptions::new()
+            .write(true)
+            .create(true)
+            .append(true)
+            .open(&path)?;
 
         Ok(CSVWriter { path, data, file })
+    }
+    
+    pub fn append(&self, row: &str) -> Result<(), CSVError> {
+        writeln!(self.file, "{}", row)?;
+        Ok(())
     }
 
     fn resolve_file_path(path_str: Option<&str>) -> PathBuf {
@@ -28,5 +38,7 @@ impl CSVWriter {
             PathBuf::from(format!("{}.csv", epoch_millis))
         }
     }
+    
+    
 
 }

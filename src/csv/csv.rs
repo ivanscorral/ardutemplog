@@ -28,8 +28,8 @@ impl CSV {
         self.headers.join(&self.delimiter.to_string())
     }
     
-    pub fn add_line(&mut self, line: String) {
-        self.lines.push(line);
+    pub fn add_line(&mut self, line: &str) {
+        self.lines.push(line.to_string());
     }
     
     pub fn set_lines(&mut self, lines: Vec<String>) {
