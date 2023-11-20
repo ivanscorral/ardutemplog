@@ -1,0 +1,4 @@
+{
+    "editor.suggestFontSize": 14,
+    "rust-analyzer.inlayHints.renderColons": false,
+}
