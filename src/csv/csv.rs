@@ -1,8 +1,8 @@
 use super::error::CSVError;
 
-
+#[derive(Debug)]
 pub struct CSV {
-    headers: Vec<String>,
+    pub headers: Vec<String>,
     lines: Vec<String>,
     delimiter: char,
 }
@@ -35,6 +35,7 @@ impl CSV {
     pub fn set_lines(&mut self, lines: Vec<String>) {
         self.lines = lines;
     }
+    
     
     pub fn set_delimiter(&mut self, delimiter: char) -> Result<(), CSVError> {
         if delimiter.is_whitespace() || !delimiter.is_ascii(){
